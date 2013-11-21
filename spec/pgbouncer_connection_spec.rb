@@ -2,42 +2,57 @@ require 'spec_helper.rb'
 
 describe 'pgbouncer::example' do
   let (:chef_run) do
-    runner = ChefSpec::ChefRunner.new(:step_into => [ 'pgbouncer_connection' ])
+    runner = ChefSpec::Runner.new(:step_into => [ 'pgbouncer_connection' ])
 
-    runner.converge 'pgbouncer::example'
+    runner.converge described_recipe
     runner
   end
-  
-  it "should install pgbouncer" do
+
+  it 'creates group pgbouncer' do
+    chef_run.should create_group 'pgbouncer'
+  end
+
+  it 'creates user pgbouncer' do
+    chef_run.should create_group 'pgbouncer'
+  end
+
+  it 'should install pgbouncer' do
     chef_run.should install_package 'pgbouncer'
   end
 
-  describe "pgbouncer::example should setup the directories" do
+  it 'should setup the pgbouncer directories' do
     [
      '/etc/pgbouncer',
      '/etc/pgbouncer/db_sockets',
      '/var/log/pgbouncer',
     ].each do |dir|
-      subject { chef_run.directory(dir) }
-      it { should_not be_nil }
-      it { should be_created }
-      it { should be_owned_by('pgbouncer','pgbouncer') }
+      expect(chef_run).to create_directory(dir).with(
+        user: 'pgbouncer',
+        group: 'pgbouncer',
+        mode: 0775
+      )
     end
   end
 
-  describe "pgbouncer::example should generate the correct pgbouncer configuration entries" do
-    subject { chef_run }
+  it "pgbouncer::example should generate the correct pgbouncer configuration entries" do
     [
      '/etc/pgbouncer/userlist-database_example_com_ro.txt',
      '/etc/pgbouncer/pgbouncer-database_example_com_ro.ini',
      '/etc/init/pgbouncer-database_example_com_ro.conf',
      '/etc/logrotate.d/pgbouncer-database_example_com_ro'
-    ].each do |file|
-      it { should create_file file }
+    ].each do |template|
+      expect(chef_run).to create_template(template).with(
+        user: 'pgbouncer',
+        group: 'pgbouncer',
+        mode: 0644
+      )
+
+      current_template = chef_run.template(template)
+      expect(current_template).to notify('service[pgbouncer-database_example_com_ro]').to(:restart)
     end
   end
 
   it "should start the service" do
-    chef_run.should start_service 'pgbouncer-database_example_com_ro'
+    chef_run.should start_service 'pgbouncer-database_example_com_ro-start'
   end
 end

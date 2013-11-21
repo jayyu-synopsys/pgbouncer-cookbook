@@ -28,6 +28,7 @@ action :start do
     provider Chef::Provider::Service::Upstart
     action [:enable, :start]
   end
+  new_resource.updated_by_last_action(true)
 end
 
 action :restart do
@@ -36,6 +37,7 @@ action :restart do
     provider Chef::Provider::Service::Upstart
     action [:enable, :restart]
   end
+  new_resource.updated_by_last_action(true)
 end
 
 action :stop do
@@ -44,6 +46,7 @@ action :stop do
     provider Chef::Provider::Service::Upstart
     action :stop
   end
+  new_resource.updated_by_last_action(true)
 end
 
 action :setup do
