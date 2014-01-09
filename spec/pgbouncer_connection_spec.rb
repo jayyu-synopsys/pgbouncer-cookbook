@@ -48,7 +48,6 @@ describe 'pgbouncer::example' do
       )
 
       current_template = chef_run.template(template)
-      expect(current_template).to notify('service[pgbouncer-database_example_com_ro]').to(:restart)
     end
   end
 

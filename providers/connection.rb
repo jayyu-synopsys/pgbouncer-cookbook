@@ -123,7 +123,6 @@ action :setup do
       owner new_resource.user
       group new_resource.group
       mode 0644
-      notifies :restart, "service[pgbouncer-#{new_resource.db_alias}]"
       variables(properties)
     end
   end
