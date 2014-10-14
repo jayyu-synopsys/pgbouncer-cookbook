@@ -1,13 +1,11 @@
 source "http://rubygems.org"
 
-gem 'foodcritic'
-gem 'thor-foodcritic'
+gem 'berkshelf', '~> 3.0'
+gem 'chef', '~> 11.12'
+gem 'chefspec', '~> 4.0'
+gem 'foodcritic', '~> 4.0'
+gem 'rake', '~> 10.3.2'
 
 group :integration do
-  gem 'guard'
-  gem 'guard-rspec'
-  gem 'rake'
-  gem 'berkshelf', '~> 2.0.10'
-  gem 'chefspec', '~> 3.0.2'
-  gem 'chef-zero'
+  gem 'travis'
 end

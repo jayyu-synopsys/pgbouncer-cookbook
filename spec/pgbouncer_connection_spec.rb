@@ -2,22 +2,20 @@ require 'spec_helper.rb'
 
 describe 'pgbouncer::example' do
   let (:chef_run) do
-    runner = ChefSpec::Runner.new(:step_into => [ 'pgbouncer_connection' ])
-
+    runner = ChefSpec::Runner.new(step_into: ['pgbouncer_connection'])
     runner.converge described_recipe
-    runner
   end
 
   it 'creates group pgbouncer' do
-    chef_run.should create_group 'pgbouncer'
+    expect(chef_run).to create_group 'pgbouncer'
   end
 
   it 'creates user pgbouncer' do
-    chef_run.should create_group 'pgbouncer'
+    expect(chef_run).to create_group 'pgbouncer'
   end
 
   it 'should install pgbouncer' do
-    chef_run.should install_package 'pgbouncer'
+    expect(chef_run).to install_package 'pgbouncer'
   end
 
   it 'should setup the pgbouncer directories' do
@@ -52,6 +50,6 @@ describe 'pgbouncer::example' do
   end
 
   it "should start the service" do
-    chef_run.should start_service 'pgbouncer-database_example_com_ro-start'
+    expect(chef_run).to start_service 'pgbouncer-database_example_com_ro-start'
   end
 end
