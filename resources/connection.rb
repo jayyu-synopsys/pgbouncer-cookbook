@@ -26,6 +26,8 @@ attribute :db_port, :kind_of => String, :required => true
 attribute :db_name, :kind_of => String, :required => true
 
 attribute :userlist, :kind_of => Hash, :required => true
+attribute :admin_users, :kind_of => Array, :default => []
+attribute :stats_users, :kind_of => Array, :default => []
 
 attribute :listen_addr, :kind_of => String
 attribute :listen_port, :kind_of => String
