@@ -122,7 +122,7 @@ action :setup do
       source source_template
       owner new_resource.user
       group new_resource.group
-      mode 0644
+      mode destination_file.include? 'userlist' ? 0600 : 0644
       variables(properties)
     end
   end
