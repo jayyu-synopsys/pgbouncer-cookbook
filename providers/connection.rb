@@ -26,7 +26,7 @@ action :start do
   service "pgbouncer-#{new_resource.db_alias}-start" do
     service_name "pgbouncer-#{new_resource.db_alias}" # this is to eliminate warnings around http://tickets.opscode.com/browse/CHEF-3694
     provider Chef::Provider::Service::Upstart
-    action [:enable, :start]
+    action [:enable, :start, :reload]
   end
   new_resource.updated_by_last_action(true)
 end
@@ -68,7 +68,7 @@ action :setup do
 
   service "pgbouncer-#{new_resource.db_alias}" do
     provider Chef::Provider::Service::Upstart
-    supports :enable => true, :start => true, :restart => true
+    supports :enable => true, :start => true, :restart => true, :reload => true
     action :nothing
   end
 
