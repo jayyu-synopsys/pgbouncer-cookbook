@@ -60,6 +60,17 @@ action :setup do
     system true
   end
 
+  # Add custom ppa to use pgbouncer 1.6
+  include_recipe 'apt'
+
+  apt_repository 'pgbouncer' do
+    uri 'http://ppa.launchpad.net/inean/pgbouncer/ubuntu'
+    distribution node['lsb']['codename']
+    components ['main']
+    keyserver 'keyserver.ubuntu.com'
+    key 'DF35377B'
+  end
+
   # install the pgbouncer package
   #
   package 'pgbouncer' do
