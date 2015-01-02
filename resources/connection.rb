@@ -28,6 +28,7 @@ attribute :db_name, :kind_of => String
 attribute :use_db_fallback, :kind_of => [TrueClass, FalseClass], :default => true
 
 attribute :userlist, :kind_of => Hash, :required => true
+attribute :auth_user, :kind_of => String
 attribute :admin_users, :kind_of => Array, :default => []
 attribute :stats_users, :kind_of => Array, :default => []
 

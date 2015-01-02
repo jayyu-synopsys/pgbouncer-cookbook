@@ -6,9 +6,9 @@
 ;;   pool_size= connect_query=
 [databases]
 <% if @use_db_fallback %>
-* = host=<%= @db_host %> port=<%= @db_port %>
+* = host=<%= @db_host %> port=<%= @db_port %> <%= "auth_user=#{@auth_user}" unless @auth_user.nil? || @auth_user.empty? %>
 <% else %>
-<%= @db_alias %> = host=<%= @db_host %> port=<%= @db_port %> dbname=<%= @db_name %> <%= "connect_query='#{@connect_query}'" unless @connect_query.nil? || @connect_query.empty? %>
+<%= @db_alias %> = host=<%= @db_host %> port=<%= @db_port %> dbname=<%= @db_name %> <%= "auth_user=#{@auth_user}" unless @auth_user.nil? || @auth_user.empty? %> <%= "connect_query='#{@connect_query}'" unless @connect_query.nil? || @connect_query.empty? %>
 <% end %>
 
 ;; Configuration section
