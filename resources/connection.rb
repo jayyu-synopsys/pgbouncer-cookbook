@@ -31,6 +31,7 @@ attribute :userlist, :kind_of => Hash, :required => true
 attribute :auth_user, :kind_of => String
 attribute :admin_users, :kind_of => Array, :default => []
 attribute :stats_users, :kind_of => Array, :default => []
+attribute :users, :kind_of => Hash, :default => Hash.new
 
 attribute :listen_addr, :kind_of => String, :default => '*'
 attribute :listen_port, :kind_of => String
