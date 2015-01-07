@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+require 'set'
+
 def initialize(*args)
   super
   @action = :setup
@@ -84,14 +86,15 @@ action :setup do
   end
 
   # create the log, pid, db_sockets, /etc/pgbouncer, and application socket directories
-  [
+  Set.new([
    new_resource.log_dir,
    new_resource.pid_dir,
    new_resource.socket_dir,
    ::File.expand_path(::File.join(new_resource.socket_dir, new_resource.db_alias)),
    '/etc/pgbouncer'
-  ].each do |dir|
-    directory dir do
+  ]).each do |dir|
+    directory "#{new_resource.name}::#{dir}" do
+      path dir
       action :create
       recursive true
       owner new_resource.user
