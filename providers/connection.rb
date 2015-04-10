@@ -63,7 +63,7 @@ action :setup do
   end
 
   # Add custom ppa to use pgbouncer 1.6
-  include_recipe 'apt'
+  run_context.include_recipe 'apt'
 
   apt_repository 'pgbouncer' do
     uri 'http://ppa.launchpad.net/inean/pgbouncer/ubuntu'
