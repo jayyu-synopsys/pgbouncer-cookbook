@@ -64,3 +64,6 @@ attribute :server_lifetime, :kind_of => Integer
 attribute :ignore_startup_parameters, :kind_of => String
 attribute :server_check_delay, :kind_of => Integer
 attribute :reserve_pool_timeout, :kind_of => Integer
+
+attribute :soft_limit, :kind_of => Integer, :default => 8192
+attribute :hard_limit, :kind_of => Integer, :default => 8192
