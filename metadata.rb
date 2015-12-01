@@ -12,3 +12,5 @@ recipe		 "pgbouncer::example", "this gives an example of how one could consume t
 %w{ubuntu}.each do |os|
   supports os
 end
+
+depends "apt"
