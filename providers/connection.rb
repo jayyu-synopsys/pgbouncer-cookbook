@@ -102,23 +102,6 @@ action :setup do
     end
   end
 
-  # resources only surface defaults when actually hitting accessors
-  # so we need to fetch them explicitly...
-  # This is somewhat ugly and could break but Chef seems to generate
-  # _set_or_return_* methods for every attribute, so iterating over
-  # the methods seems to be the best way to find the declared attributes
-  #
-  properties = new_resource.methods.inject({}) do |memo, method|
-    next memo unless method.to_s =~ /\_set\_or\_return_.*/
-
-    property = method.to_s.gsub("_set_or_return_","")
-    value = new_resource.send(property.to_sym)
-    next memo if value.nil?
-
-    memo[property] = value
-    memo
-  end
-
   # build the userlist, pgbouncer.ini, upstart conf and logrotate.d templates
   {
     "/etc/pgbouncer/userlist-#{new_resource.db_alias}.txt" => 'etc/pgbouncer/userlist.txt.erb',
@@ -130,13 +113,53 @@ action :setup do
     ## key is frozen and immutable.
     destination_file = key.dup
 
+    # to get variables, use `grep "^attribute" resources/connection.rb |cut -d' ' -f2 | sed -e "s/:\(.*\),/\1: new_resource.\1,/"`
     template destination_file do
       cookbook 'pgbouncer'
       source source_template
       owner new_resource.user
       group new_resource.group
       mode destination_file.include?('userlist') ? 0600 : 0644
-      variables(properties)
+      variables({
+        db_alias: new_resource.db_alias,
+        db_host: new_resource.db_host,
+        db_port: new_resource.db_port,
+        db_name: new_resource.db_name,
+        use_db_fallback: new_resource.use_db_fallback,
+        userlist: new_resource.userlist,
+        auth_user: new_resource.auth_user,
+        admin_users: new_resource.admin_users,
+        stats_users: new_resource.stats_users,
+        users: new_resource.users,
+        listen_addr: new_resource.listen_addr,
+        listen_port: new_resource.listen_port,
+        user: new_resource.user,
+        group: new_resource.group,
+        log_dir: new_resource.log_dir,
+        socket_dir: new_resource.socket_dir,
+        pid_dir: new_resource.pid_dir,
+        pool_mode: new_resource.pool_mode,
+        max_client_conn: new_resource.max_client_conn,
+        default_pool_size: new_resource.default_pool_size,
+        min_pool_size: new_resource.min_pool_size,
+        reserve_pool_size: new_resource.reserve_pool_size,
+        server_idle_timeout: new_resource.server_idle_timeout,
+        server_reset_query: new_resource.server_reset_query,
+        connect_query: new_resource.connect_query,
+        tcp_keepalive: new_resource.tcp_keepalive,
+        tcp_keepidle: new_resource.tcp_keepidle,
+        tcp_keepintvl: new_resource.tcp_keepintvl,
+        server_check_query: new_resource.server_check_query,
+        log_connections: new_resource.log_connections,
+        log_disconnections: new_resource.log_disconnections,
+        log_pooler_errors: new_resource.log_pooler_errors,
+        server_lifetime: new_resource.server_lifetime,
+        ignore_startup_parameters: new_resource.ignore_startup_parameters,
+        server_check_delay: new_resource.server_check_delay,
+        reserve_pool_timeout: new_resource.reserve_pool_timeout,
+        soft_limit: new_resource.soft_limit,
+        hard_limit: new_resource.hard_limit
+      })
     end
   end
 
