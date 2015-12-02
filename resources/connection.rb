@@ -51,15 +51,15 @@ attribute :server_idle_timeout, :kind_of => Integer, :default => 3600
 
 attribute :server_reset_query, :kind_of => String
 attribute :connect_query, :kind_of => String
-attribute :tcp_keepalive, :kind_of => Integer
-attribute :tcp_keepidle, :kind_of => Integer
-attribute :tcp_keepintvl, :kind_of => Integer
+attribute :tcp_keepalive, :kind_of => Integer, :default => 1
+attribute :tcp_keepidle, :kind_of => Integer, :default => 7200
+attribute :tcp_keepintvl, :kind_of => Integer, :default => 75
 
 attribute :server_check_query, :kind_of => String
-attribute :log_connections, :kind_of => Integer
-attribute :log_disconnections, :kind_of => Integer
-attribute :log_pooler_errors, :kind_of => Integer
-attribute :server_lifetime, :kind_of => Integer
+attribute :log_connections, :kind_of => Integer, :default => 1
+attribute :log_disconnections, :kind_of => Integer, :default => 1
+attribute :log_pooler_errors, :kind_of => Integer, :default => 1
+attribute :server_lifetime, :kind_of => Integer, :default => 3600
 
 attribute :ignore_startup_parameters, :kind_of => String
 attribute :server_check_delay, :kind_of => Integer

@@ -119,13 +119,13 @@ reserve_pool_size = <%= @reserve_pool_size %>
 ;reserve_pool_timeout = 3
 
 ; log if client connects or server connection is made
-;log_connections = <%= @log_connections %>
+log_connections = <%= @log_connections %>
 
 ; log if and why connection was closed
-;log_disconnections = <%= @log_disconnections %>
+log_disconnections = <%= @log_disconnections %>
 
 ; log error messages pooler sends to clients
-;log_pooler_errors = <%= @log_pooler_errors %>
+log_pooler_errors = <%= @log_pooler_errors %>
 
 
 ; If off, then server connections are reused in LIFO manner
@@ -135,7 +135,7 @@ server_round_robin = 1
 ;;; Timeouts
 ;;;
 ;; Close server connection if its been connected longer.
-;server_lifetime = <%= @server_lifetime %>
+server_lifetime = <%= @server_lifetime %>
 
 ;; Close server connection if its not been used in this time.
 ;; Allows to clean unnecessary connections from pool after peak.
@@ -191,7 +191,7 @@ server_idle_timeout = <%= @server_idle_timeout %>
 ;tcp_socket_buffer = 0
 
 ;; whether tcp keepalive should be turned on (0/1)
-<%= defined?(@tcp_keepalive) ? "tcp_keepalive = #{@tcp_keepalive}" : ";tcp_keepalive = 1" %>
+tcp_keepalive = <%= @tcp_keepalive %>
 
 ;; following options are Linux-specific.
 ;; they also require tcp_keepalive=1
@@ -201,10 +201,10 @@ server_idle_timeout = <%= @server_idle_timeout %>
 
 ;; how long the connection can be idle,
 ;; before sending keepalive packets
-<%= defined?(@tcp_keepidle) ? "tcp_keepidle = #{@tcp_keepidle}" : ";tcp_keepidle = 0" %>
+tcp_keepidle = <%= @tcp_keepidle %>
 
 ;; The time between individual keepalive probes.
-<%= defined?(@tcp_keepintvl) ? "tcp_keepintvl = #{@tcp_keepintvl}" : ";tcp_keepintvl = 0" %>
+tcp_keepintvl = <%= @tcp_keepintvl %>
 
 
 ;; DNS lookup caching time
