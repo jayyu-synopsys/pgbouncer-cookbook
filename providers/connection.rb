@@ -2,20 +2,6 @@
 # Cookbook Name:: pgbouncer
 # Provider:: connection
 #
-# Copyright 2010-2013, Whitepages Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
 require 'set'
 
@@ -25,30 +11,27 @@ def initialize(*args)
 end
 
 action :start do
-  service "pgbouncer-#{new_resource.db_alias}-start" do
-    service_name "pgbouncer-#{new_resource.db_alias}" # this is to eliminate warnings around http://tickets.opscode.com/browse/CHEF-3694
-    provider Chef::Provider::Service::Upstart
+  service "pgbouncer-start" do
+    service_name "pgbouncer" # this is to eliminate warnings around http://tickets.opscode.com/browse/CHEF-3694
+    provider Chef::Provider::Service::Systemd
     action [:enable, :start, :reload]
   end
-  new_resource.updated_by_last_action(true)
 end
 
 action :restart do
-  service "pgbouncer-#{new_resource.db_alias}-restart" do
-    service_name "pgbouncer-#{new_resource.db_alias}" # this is to eliminate warnings around http://tickets.opscode.com/browse/CHEF-3694
-    provider Chef::Provider::Service::Upstart
+  service "pgbouncer-restart" do
+    service_name "pgbouncer" # this is to eliminate warnings around http://tickets.opscode.com/browse/CHEF-3694
+    provider Chef::Provider::Service::Systemd
     action [:enable, :restart]
   end
-  new_resource.updated_by_last_action(true)
 end
 
 action :stop do
-  service "pgbouncer-#{new_resource.db_alias}-stop" do
-    service_name "pgbouncer-#{new_resource.db_alias}" # this is to eliminate warnings around http://tickets.opscode.com/browse/CHEF-3694
-    provider Chef::Provider::Service::Upstart
+  service "pgbouncer-stop" do
+    service_name "pgbouncer" # this is to eliminate warnings around http://tickets.opscode.com/browse/CHEF-3694
+    provider Chef::Provider::Service::Systemd
     action :stop
   end
-  new_resource.updated_by_last_action(true)
 end
 
 action :setup do
@@ -78,36 +61,18 @@ action :setup do
     action [:install, :upgrade]
   end
 
-  service "pgbouncer-#{new_resource.db_alias}" do
-    provider Chef::Provider::Service::Upstart
+  service "pgbouncer" do
+    provider Chef::Provider::Service::Systemd
     supports :enable => true, :start => true, :restart => true, :reload => true
     action :nothing
   end
 
-  # create the log, pid, db_sockets, /etc/pgbouncer, and application socket directories
-  Set.new([
-   new_resource.log_dir,
-   new_resource.pid_dir,
-   new_resource.socket_dir,
-   ::File.expand_path(::File.join(new_resource.socket_dir, new_resource.db_alias)),
-   '/etc/pgbouncer'
-  ]).each do |dir|
-    directory "#{new_resource.name}::#{dir}" do
-      path dir
-      action :create
-      recursive true
-      owner new_resource.user
-      group new_resource.group
-      mode 0775
-    end
-  end
-
   # build the userlist, pgbouncer.ini, upstart conf and logrotate.d templates
   {
-    "/etc/pgbouncer/userlist-#{new_resource.db_alias}.txt" => 'etc/pgbouncer/userlist.txt.erb',
-    "/etc/pgbouncer/pgbouncer-#{new_resource.db_alias}.ini" => 'etc/pgbouncer/pgbouncer.ini.erb',
-    "/etc/init/pgbouncer-#{new_resource.db_alias}.conf" => 'etc/init/pgbouncer.conf.erb',
-    "/etc/logrotate.d/pgbouncer-#{new_resource.db_alias}" => 'etc/logrotate.d/pgbouncer-logrotate.d.erb'
+    "/etc/pgbouncer/userlist.txt" => 'etc/pgbouncer/userlist.txt.erb',
+    "/etc/pgbouncer/pgbouncer.ini" => 'etc/pgbouncer/pgbouncer.ini.erb',
+    "/etc/init/pgbouncer.conf" => 'etc/init/pgbouncer.conf.erb',
+    "/etc/logrotate.d/pgbouncer" => 'etc/logrotate.d/pgbouncer-logrotate.d.erb'
   }.each do |key, source_template|
     ## We are setting destination_file to a duplicate of key because the hash
     ## key is frozen and immutable.
@@ -135,9 +100,6 @@ action :setup do
         listen_port: new_resource.listen_port,
         user: new_resource.user,
         group: new_resource.group,
-        log_dir: new_resource.log_dir,
-        socket_dir: new_resource.socket_dir,
-        pid_dir: new_resource.pid_dir,
         pool_mode: new_resource.pool_mode,
         max_client_conn: new_resource.max_client_conn,
         default_pool_size: new_resource.default_pool_size,
@@ -163,20 +125,18 @@ action :setup do
     end
   end
 
-  new_resource.updated_by_last_action(true)
 end
 
 action :teardown do
 
-  { "/etc/pgbouncer/userlist-#{new_resource.db_alias}.txt" => 'etc/pgbouncer/userlist.txt.erb',
-    "/etc/pgbouncer/pgbouncer-#{new_resource.db_alias}.ini" => 'etc/pgbouncer/pgbouncer.ini.erb',
-    "/etc/init/pgbouncer-#{new_resource.db_alias}.conf" => 'etc/pgbouncer/pgbouncer.conf',
-    "/etc/logrotate.d/pgbouncer-#{new_resource.db_alias}" => 'etc/logrotate.d/pgbouncer-logrotate.d'
+  { "/etc/pgbouncer/userlist.txt" => 'etc/pgbouncer/userlist.txt.erb',
+    "/etc/pgbouncer/pgbouncer.ini" => 'etc/pgbouncer/pgbouncer.ini.erb',
+    "/etc/init/pgbouncer.conf" => 'etc/pgbouncer/pgbouncer.conf',
+    "/etc/logrotate.d/pgbouncer" => 'etc/logrotate.d/pgbouncer-logrotate.d'
   }.each do |destination_file, source_template|
     file destination_file do
       action :delete
     end
   end
 
-  new_resource.updated_by_last_action(true)
 end
