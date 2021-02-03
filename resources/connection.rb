@@ -2,20 +2,6 @@
 # Cookbook Name:: pgbouncer
 # Resource:: connection
 #
-# Copyright 2010-2013, Whitepages Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
 actions :setup, :teardown, :start, :restart, :stop
 default_action :setup
@@ -36,11 +22,11 @@ attribute :users, :kind_of => Hash, :default => Hash.new
 attribute :listen_addr, :kind_of => String, :default => '*'
 attribute :listen_port, :kind_of => String
 
-attribute :user, :kind_of => String, :default => 'pgbouncer'
-attribute :group, :kind_of => String, :default => 'pgbouncer'
-attribute :log_dir, :kind_of => String, :default => '/var/log/pgbouncer'
-attribute :socket_dir, :kind_of => String, :default => '/var/run/pgbouncer'
-attribute :pid_dir, :kind_of => String, :default => '/var/run/pgbouncer'
+attribute :user, :kind_of => String, :default => 'postgres'
+attribute :group, :kind_of => String, :default => 'postgres'
+attribute :log_dir, :kind_of => String, :default => '/var/log/postgres'
+attribute :socket_dir, :kind_of => String, :default => '/var/run/postgres'
+attribute :pid_dir, :kind_of => String, :default => '/var/run/postgres'
 
 attribute :pool_mode, :kind_of => String, :default => 'transaction'
 attribute :max_client_conn, :kind_of => Integer, :default => 1000
