@@ -9,7 +9,7 @@ exposing a local *nix socket that routes to a downstream database on another hos
 Requirements
 ============
 
-Chef 0.7+
+Chef 1.4+
 
 Platform
 --------
@@ -82,7 +82,6 @@ Multiple aliases may be supported on a single host.
       action :stop
     end
 
-    # TODO: include more examples
 
 Recipes
 =======
@@ -90,55 +89,4 @@ Recipes
 default
 -------
 
-Empty: this is a resource-only cookbook
 
-example
--------
-
-Example of how to use the resource; also exercised in the spec/ tests
-
-Testing
-=======
-
-This cookbook has been "Tested in Production"&trade;, but also has some basic RSpec tests.
-
-**NOTE**: because Chef 10 has cookbook naming expectations, the root repo expects to be in a folder
-named 'pgbouncer'.
-
-      bundle install
-      bundle exec rake spec
-
-The cookbook is clean under FoodCritic.
-
-      bundle install
-      bundle exec rake foodcritic
-
-To see the installation end to end, we've also got a rake task that spins up a [chef-zero](https://github.com/jkeiser/chef-zero)
-local instance, uploads the cookbooks via berkshelf, and spins up a vagrant instance that pulls the data down.  This is using a new
-Vagrant plugin, created here at Whitepages, called [vagrant-chefzero](https://github.com/whitepages/vagrant-chefzero/).
-
-      vagrant plugin install vagrant-chefzero
-      bundle install
-      bundle exec rake vagrant_startup
-
-License and Author(s)
-=====================
-
-- Author:: Owyn Richen (<orichen@whitepages.com>)
-- Author:: Jack Foy (<jfoy@whitepages.com>)
-- Author:: Paul Kohan (<pkohan@whitepages.com>)
-- Author:: Brian Engelman (<bengelman@whitepages.com>)
-
-Copyright 2010-2013, [Whitepages Inc.](http://www.whitepages.com/)
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
