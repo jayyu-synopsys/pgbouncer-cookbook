@@ -24,8 +24,8 @@
 ;;; Administrative settings
 ;;;
 
-logfile = <%= @log_dir %>/pgbouncer-<%= @db_alias %>.log
-pidfile = <%= @pid_dir %>/pgbouncer-<%= @db_alias %>.pid
+logfile = /var/log/postgresql/pgbouncer.log
+pidfile = /var/run/postgresql/pgbouncer.pid
 
 ;;;
 ;;; Where to wait for clients
@@ -38,7 +38,8 @@ pidfile = <%= @pid_dir %>/pgbouncer-<%= @db_alias %>.pid
 
 ; unix socket is also used for -R.
 ; On debian it should be /var/run/postgresql
-unix_socket_dir = <%= @socket_dir %>/<%= @db_alias %>/
+
+unix_socket_dir = /var/run/postgresql
 
 ;;;
 ;;; Authentication settings
@@ -46,7 +47,7 @@ unix_socket_dir = <%= @socket_dir %>/<%= @db_alias %>/
 
 ; any, trust, plain, crypt, md5
 auth_type = md5
-auth_file = /etc/pgbouncer/userlist-<%= @db_alias %>.txt
+auth_file = /etc/pgbouncer/userlist.txt
 
 ;;;
 ;;; Users allowed into database 'pgbouncer'
